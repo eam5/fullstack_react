@@ -17,12 +17,14 @@ const App = (props) => {
     const age = 40
     const [ counter, setCounter ] = useState(0)
 
-    setTimeout(
-        () => setCounter(counter + 1),
-        1000
-    )
+    const setToValue = (value) => () => {setCounter(value)}
+    //Using the above setToValue 'double function' not necessarily better than below functions, just example of currying techinque
 
-    console.log('rendering...', counter)
+    // const increaseByOne = () =>
+    //     setCounter(counter + 1)
+
+    // const setToZero = () =>
+    //     setCounter(0)
     
     return ( 
     <>
@@ -31,6 +33,8 @@ const App = (props) => {
         <Hello name={name} age={age}/>
 
         <div>{counter}</div>
+        <button onClick={setToValue(counter + 1)}>plus</button>
+        <button onClick={setToValue(0)}>zero</button>
     </>
 ) }
 
