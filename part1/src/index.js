@@ -16,11 +16,14 @@ const App = (props) => {
     const name = 'Mark'
     const age = 40
     const [ counter, setCounter ] = useState(0)
+
     setTimeout(
         () => setCounter(counter + 1),
         1000
     )
 
+    console.log('rendering...', counter)
+    
     return ( 
     <>
         <h1>Greetings</h1>
