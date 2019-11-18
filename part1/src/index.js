@@ -12,12 +12,25 @@ const Hello = ({ name,age }) => {
     )
 }
 
+const Display = ({ counter }) => {
+    return (
+        <div>{counter}</div>
+    )
+}
+
+const Button = ({ onClick, text }) => {
+    return (
+        <button onClick={onClick}>
+            {text}
+        </button>
+    )
+}
+
 const App = (props) => {
     const name = 'Mark'
     const age = 40
     const [ counter, setCounter ] = useState(0)
-
-    const setToValue = (value) => () => {setCounter(value)}
+    const setToValue = (value) => setCounter(value)
     //Using the above setToValue 'double function' not necessarily better than below functions, just example of currying techinque
 
     // const increaseByOne = () =>
@@ -32,9 +45,10 @@ const App = (props) => {
         <Hello name="Gerard" age={21+14}/>
         <Hello name={name} age={age}/>
 
-        <div>{counter}</div>
-        <button onClick={setToValue(counter + 1)}>plus</button>
-        <button onClick={setToValue(0)}>zero</button>
+        <Display counter={counter}/>
+        <Button onClick={() => setToValue(counter + 1)} text='plus' />
+        <Button onClick={() => setToValue(0)} text='zero' />
+        <Button onClick={() => setToValue(counter - 1)} text='minus' />
     </>
 ) }
 
