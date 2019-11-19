@@ -1,57 +1,35 @@
 import React, { useState} from 'react'
 import ReactDOM from 'react-dom'
 
-const History = (props) => {
-    if (props.allClicks.length === 0) {
-        return (
-            <div>
-                press a button
-            </div>
-        )
+
+const App = (props) => {
+    const [value, setValue] = useState(10)
+
+    //event handler examples
+    const handleClick = () => {
+        console.log('clicked button')
+        setValue(0)
+    }
+//function calling function examples
+    const setToValue = (newValue) => ()=> {
+        setValue(newValue)
+    }
+
+    const setToValue2 = (newValue2) => {
+        setValue(newValue2)
     }
 
     return (
         <div>
-            button history: {props.allClicks.join(' ')}
+            {value}
+            <button onClick={handleClick}>reset to zero</button>
+            <button onClick={setToValue(1000)}>1000</button>
+            <button onClick={() => setToValue2(100)}>100</button>
+            <button onClick={setToValue(value + 1)}>add 1</button>
+
         </div>
     )
 }
-
-const Button = (props) => {
-    console.log(props)
-    const { onClick, text } = props
-
-    return (
-        <button onClick={onClick}>{text}</button>
-
-    )
-    }
-
-const App = (props) => {
-    const [left, setLeft] = useState(0)
-    const [right, setRight] = useState(0)
-    const [allClicks, setAll] = useState([])
-
-    const handleLeftClick = () => {
-        setAll(allClicks.concat('L'))
-        setLeft(left + 1)
-    }
-    const handleRightClick = () => {
-        setAll(allClicks.concat('R'))
-        setRight(right + 1)
-    }
-
-    return ( 
-        <div>
-            <div>
-                {left}
-                <Button onClick={handleLeftClick} text='left' />
-                <Button onClick={handleRightClick} text='right' />
-                {right}
-                <History allClicks={allClicks} />
-            </div>
-        </div>
-) }
 
 
 ReactDOM.render(<App />, document.getElementById('root'))
