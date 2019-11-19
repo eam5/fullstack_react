@@ -2,10 +2,25 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 const App = () => {
-  // save clicks of each button to own state
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
+  const sum = (p1, p2, p3) => {
+    return p1 + p2 + p3
+  }
+  const all = sum(good, neutral, bad)
+  const average = (a, b, c, d) => {
+      console.log(a)
+      console.log(b)
+      console.log(c)
+    return (a + b + c) / d
+  }
+  const result = average(good*1, neutral*0, bad*-1, all)
+  const percent = (g, a) => {
+      return (g / a) * 100
+  }
+  const percentGood = percent(good,all)
+
 
   return (
     <div>
@@ -18,6 +33,9 @@ const App = () => {
       <p>good: {good}</p>
       <p>neutral: {neutral}</p>
       <p>bad: {bad}</p>
+      <p>all: {all}</p>
+      <p>average: {result}</p>
+      <p>positive: {percentGood}%</p>
     </div>
   )
 }
