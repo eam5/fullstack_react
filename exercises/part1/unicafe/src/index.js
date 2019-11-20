@@ -8,11 +8,17 @@ const Button = (props) => (
 const Statistic = (props) => {
     if (props.text === "positive") {
         return (
-            <p>{props.text}: {props.value}%</p>
+            <tr>
+            <td>{props.text}</td>
+            <td>{props.value}%</td>
+            </tr>
         )    
     }
     return (
-        <p>{props.text}: {props.value}</p>
+        <tr>
+            <td>{props.text}</td>
+            <td>{props.value}</td>
+        </tr>
     )
 }
 
@@ -25,12 +31,16 @@ const Statistics = (props) => {
     }
     return (
     <div>
-        <Statistic text="good" value={props.good} />
-        <Statistic text="neutral" value={props.neutral} />
-        <Statistic text="bad" value={props.bad} />
-        <Statistic text="all" value={props.all} />
-        <Statistic text="average" value={props.result} />
-        <Statistic text="positive" value={props.percentGood} />
+        <table>
+            <tbody>
+            <Statistic text="good" value={props.good} />
+            <Statistic text="neutral" value={props.neutral} />
+            <Statistic text="bad" value={props.bad} />
+            <Statistic text="all" value={props.all} />
+            <Statistic text="average" value={props.result} />
+            <Statistic text="positive" value={props.percentGood} />
+            </tbody>
+        </table>
     </div>
     )
   }
