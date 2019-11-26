@@ -23,15 +23,21 @@ const App = (props) => {
     upVote(copy)
     console.log(copy)
 }
+
+console.log('most points:', points.indexOf(Math.max(...points)));
   
   return (
     <div>
+      <h2>anecdote</h2>
       {props.anecdotes[selected]}
       <Vote index={selected} points={points} />
       <div>
         <button onClick={() => vote(selected) }>vote</button>
         <button onClick={() => setSelected(Math.floor(Math.random() * Math.floor(props.anecdotes.length)))}>next anecdotes</button>
       </div>
+      <h2>most votes</h2>
+      {props.anecdotes[points.indexOf(Math.max(...points))]}
+      <div>has {Math.max(...points)} points</div>
     </div>
   )
 }
