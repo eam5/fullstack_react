@@ -1,18 +1,41 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
+const Vote = (props) => (
+  <div>has {props.points[props.index]} votes</div>
+)
+
 const App = (props) => {
   const [selected, setSelected] = useState(0)
+  const [points, upVote] = useState(new Array(props.anecdotes.length).fill(0))
+  console.log(selected)
+  console.log(points)
 
+  const vote = (index) => {
+    // Make a copy of the state array here
+    const copy = [...points]
+    // Update the value of the copy here
+    copy[index] += 1
+    // Then send that copy to the state's update function.
+    // This function (specified up there on line 10) sets the value of the state variable (in this case 'points') to
+    // the value passed to the function ('upVote'). So the trick is to make a copy of the array, update the copy, then
+    // send the copy to the update function and that array is then set as the state 
+    upVote(copy)
+    console.log(copy)
+}
+  
   return (
     <div>
       {props.anecdotes[selected]}
+      <Vote index={selected} points={points} />
       <div>
-      <button onClick={() => setSelected(Math.floor(Math.random() * Math.floor(6)))}>next anecdotes</button>
+        <button onClick={() => vote(selected) }>vote</button>
+        <button onClick={() => setSelected(Math.floor(Math.random() * Math.floor(props.anecdotes.length)))}>next anecdotes</button>
       </div>
     </div>
   )
 }
+
 
 const anecdotes = [
   'If it hurts, do it more often',
