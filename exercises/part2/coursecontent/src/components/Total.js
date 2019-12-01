@@ -2,7 +2,6 @@ import React from 'react'
 
 const Total = ({ total }) => {
     const totalAmount = total.reduce(function(sum, part) {
-        console.log("sum", sum, part)
         return sum + part.exercises
     }, 0)
     return (
