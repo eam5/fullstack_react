@@ -8,28 +8,40 @@ const Name = ({list}) => {
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '555-555-5555', id: 1 }
-  ]) 
+    { name: 'Arto Hellas', number: '040-123456' },
+    { name: 'Ada Lovelace', number: '39-44-5323523' },
+    { name: 'Dan Abramov', number: '12-43-234345' },
+    { name: 'Mary Poppendieck', number: '39-23-6423122' }  ]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
   const [showAlert,setShowAlert] = useState(true)
   console.log(showAlert)
 
-  const rows = () => persons.map(list =>
+  const rows = () => persons.filter(filterBy(searchTerm)).map(list =>
     <Name
-        key={list.id}
+        key={list.name}
         list={list}
     />)
   
   const findName = persons.some(element => element.name === newName )
-  console.log(findName)
+  // console.log(findName)
+
+  const filterBy = (term) => {
+    const termLowerCase = term.toLowerCase()
+    return (person) =>
+      Object.keys(person)
+        .some(prop => person[prop].toLowerCase().indexOf(termLowerCase) !== -1)
+  }
+  
+  // const found = persons.filter(filterBy(searchTerm))
+  // console.log(found)
 
   const addName = (event) => {
       event.preventDefault()
       const nameObject = {
           name: newName,
           number: newNumber,
-          id: persons.length + 1,
       }
       const nameAlert = findName
         ? window.alert(newName + ' is already in the phonebook')
@@ -48,9 +60,17 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value)
+  }
+
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <div>
+        filter contacts: <input value={searchTerm} onChange={handleSearchChange} />
+      </div>
+      <h2>Add new contact</h2>
       <form onSubmit={addName}>
         <div>
           name: <input value={newName} onChange={handleNameChange} />
