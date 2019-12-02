@@ -7,17 +7,21 @@ const Name = ({list}) => {
 }
 
 const App = () => {
-  const [ persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas', id: 1 }
   ]) 
-  const [ newName, setNewName ] = useState('')
-  console.log(persons)
+  const [newName, setNewName] = useState('')
+  const [showAlert,setShowAlert] = useState(true)
+  console.log(showAlert)
 
   const rows = () => persons.map(list =>
     <Name
         key={list.id}
         list={list}
     />)
+  
+  const findName = persons.some(element => element.name === newName )
+  console.log(findName)
 
   const addName = (event) => {
       event.preventDefault()
@@ -25,7 +29,11 @@ const App = () => {
           name: newName,
           id: persons.length + 1,
       }
-    setPersons(persons.concat(nameObject))
+      const nameAlert = findName
+        ? window.alert(newName + ' is already in the phonebook')
+        : setPersons(persons.concat(nameObject))
+      
+    setShowAlert(nameAlert)
     setNewName('')
   }
 
