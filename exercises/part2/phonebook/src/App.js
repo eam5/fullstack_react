@@ -1,10 +1,7 @@
 import React, { useState } from 'react'
-
-const Name = ({list}) => {
-    return (
-<div>{list.name}, {list.number}</div>
-    )
-}
+import Filter from './components/Filter'
+import Form from './components/Form'
+import Contacts from './components/Contacts'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -15,17 +12,14 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
-  const [showAlert,setShowAlert] = useState(true)
-  console.log(showAlert)
 
   const rows = () => persons.filter(filterBy(searchTerm)).map(list =>
-    <Name
+    <Contacts
         key={list.name}
         list={list}
     />)
   
   const findName = persons.some(element => element.name === newName )
-  // console.log(findName)
 
   const filterBy = (term) => {
     const termLowerCase = term.toLowerCase()
@@ -33,7 +27,7 @@ const App = () => {
       Object.keys(person)
         .some(prop => person[prop].toLowerCase().indexOf(termLowerCase) !== -1)
   }
-  
+
   // const found = persons.filter(filterBy(searchTerm))
   // console.log(found)
 
@@ -43,11 +37,13 @@ const App = () => {
           name: newName,
           number: newNumber,
       }
-      const nameAlert = findName
+      const showAlert = (condition) => {
+        condition
         ? window.alert(newName + ' is already in the phonebook')
         : setPersons(persons.concat(nameObject))
-      
-    setShowAlert(nameAlert)
+      }
+
+    showAlert(findName)
     setNewName('')
     setNewNumber('')
   }
@@ -67,23 +63,18 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <div>
-        filter contacts: <input value={searchTerm} onChange={handleSearchChange} />
-      </div>
+      <Filter searchTerm={searchTerm} handleSearchChange={handleSearchChange}/>
       <h2>Add new contact</h2>
-      <form onSubmit={addName}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <Form 
+        newName={newName} 
+        newNumber={newNumber} 
+        addName={addName} 
+        handleNameChange={handleNameChange} 
+        handleNumberChange={handleNumberChange} 
+      />
       <h2>Numbers</h2>
       {rows()}
+      {/* <Contacts contacts={persons} /> */}
     </div>
   )
 }
