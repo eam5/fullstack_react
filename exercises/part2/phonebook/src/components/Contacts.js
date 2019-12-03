@@ -1,21 +1,20 @@
 import React from 'react'
 
-const Contacts = ({list}) => {
+const Contacts = ({list, searchTerm}) => {
+    const rows = () => list.filter(filterBy(searchTerm)).map(list =>
+    <div key={list.name}>{list.name}, {list.number}</div>
+    )
+
+    const filterBy = (term) => {
+        const termLowerCase = term.toLowerCase()
+        return (person) =>
+          Object.keys(person)
+            .some(prop => person[prop].toLowerCase().indexOf(termLowerCase) !== -1)
+      }
+    
     return (
-<div>{list.name}, {list.number}</div>
+        <div>{rows()}</div>
     )
 }
 
-// const Contacts = ({contacts}) => {
-//     const rows = () => contacts.map(list =>
-//         <Name
-//             key={list.name}
-//             list={list}
-//         />
-//     )
-    
-//     return (
-//         <div>{rows()}</div>
-//     )
-// }
 export default Contacts

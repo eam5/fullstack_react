@@ -12,24 +12,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
-
-  const rows = () => persons.filter(filterBy(searchTerm)).map(list =>
-    <Contacts
-        key={list.name}
-        list={list}
-    />)
   
   const findName = persons.some(element => element.name === newName )
-
-  const filterBy = (term) => {
-    const termLowerCase = term.toLowerCase()
-    return (person) =>
-      Object.keys(person)
-        .some(prop => person[prop].toLowerCase().indexOf(termLowerCase) !== -1)
-  }
-
-  // const found = persons.filter(filterBy(searchTerm))
-  // console.log(found)
 
   const addName = (event) => {
       event.preventDefault()
@@ -73,8 +57,7 @@ const App = () => {
         handleNumberChange={handleNumberChange} 
       />
       <h2>Numbers</h2>
-      {rows()}
-      {/* <Contacts contacts={persons} /> */}
+      <Contacts list={persons} searchTerm={searchTerm}/>
     </div>
   )
 }
