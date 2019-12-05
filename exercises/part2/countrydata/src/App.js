@@ -9,14 +9,17 @@ const Filter = (props) => {
   )
 }
 
-const Countries = ({list, searchTerm, showCountry}) => {
+const Countries = ({list, searchTerm, setSearchTerm, showCountry}) => {
   const countriesToShow = showCountry
     ? list
     : list.filter(list => list.name.toLowerCase().includes(searchTerm.toLowerCase()) )
-  console.log(countriesToShow)
+
   const rows = () => countriesToShow
     .map(list =>
-      <div key={list.name}>{list.name}</div>
+      <div key={list.name}>
+        {list.name} 
+        <button onClick={() => setSearchTerm(list.name)}>show</button>
+      </div>
     )
     console.log(list.length)
     console.log(rows().length)
@@ -35,10 +38,10 @@ const Countries = ({list, searchTerm, showCountry}) => {
       </div>
       )
 
-    return rows().length > 15 ? 'Too many matches'
+    return rows().length > 15 && rows().length < 250 ? 'Too many matches, narrow search'
         : rows().length <= 15 && rows().length > 1 ? <div>{rows()}</div>
         : rows().length === 1 ? <div>{countryInfo()}</div>
-        : null;
+        : 'Enter search term';
   
 }
 
@@ -47,10 +50,11 @@ const App = () => {
   const [countries, setCountries] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [showCountry, setShowCountry] = useState(searchTerm)
-console.log(countries[0])
-console.log(showCountry)
+// console.log(countries[0])
+// console.log(showCountry)
 console.log(searchTerm)
-  const hook = () => {
+
+const hook = () => {
     axios
       .get('https://restcountries.eu/rest/v2/all')
       .then(response => {
@@ -64,7 +68,6 @@ console.log(searchTerm)
     setSearchTerm(event.target.value)
   }
 
-
   return (
     <div>
         <Filter 
@@ -74,6 +77,7 @@ console.log(searchTerm)
         <Countries 
           list={countries} 
           searchTerm={searchTerm} 
+          setSearchTerm={setSearchTerm}
           showCountry={showCountry}
         />
     </div>
