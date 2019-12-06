@@ -3,6 +3,7 @@ import axios from 'axios'
 import Filter from './components/Filter'
 import Form from './components/Form'
 import Contacts from './components/Contacts'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -10,15 +11,13 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
 
-  const hook= () => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+  useEffect(() => {
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
-  }
-
-  useEffect(hook, [])
+  }, [])
   
   const findName = persons.some(element => element.name === newName )
 
@@ -31,12 +30,14 @@ const App = () => {
       const showAlert = (condition) => {
         condition
         ? window.alert(newName + ' is already in the phonebook')
-        : setPersons(persons.concat(nameObject))
+        : personService.create(nameObject).then(data => {
+          setPersons(persons.concat(data))
+        })
       }
 
-    showAlert(findName)
-    setNewName('')
-    setNewNumber('')
+      showAlert(findName)
+      setNewName('')
+      setNewNumber('')
   }
 
   const handleNameChange = (event) => {
