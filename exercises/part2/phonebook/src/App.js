@@ -20,18 +20,7 @@ const App = () => {
   }, [])
   
   const findName = persons.some(element => element.name === newName )
-
-  const rows = () => persons
-  .filter(list => 
-    list.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  .map(list =>
-    <Contacts
-      key={list.name}
-      list={list}
-      deleteNameOf={() => deleteNameOf(list.id)}
-    />
-  )
+  console.log(findName)
 
   const addName = (event) => {
       event.preventDefault()
@@ -39,12 +28,27 @@ const App = () => {
           name: newName,
           number: newNumber,
       }
+
+      const numberConfirm = id => {
+        const name = persons.find(n => n.name === newName)
+        const updateNumber = { ...name, number: newNumber}
+        console.log(name)
+        
+        if (window.confirm(`${newName} is already in the phonebook, replace number?`)) {
+          personService
+              .update(name.id, updateNumber)
+              .then(returnedNumber => {
+                setPersons(persons.map(name => name.id !==id ? name : returnedNumber))
+              })
+        }
+      }
+
       const showAlert = (condition) => {
         condition
-        ? window.alert(newName + ' is already in the phonebook')
+        ? numberConfirm()
         : personService.create(nameObject).then(data => {
-          setPersons(persons.concat(data))
-        })
+              setPersons(persons.concat(data))
+            })
       }
 
       showAlert(findName)
@@ -66,9 +70,8 @@ const App = () => {
 
   const deleteNameOf = id => {
     const person = persons.find(n => n.id === id)
-    // const deletedPerson = { ...person }
     console.log(person)
-    // console.log(deletedPerson)
+
     if
     (window.confirm(`Delete ${person.name} from Phonebook?`)) {
       personService 
@@ -90,12 +93,11 @@ const App = () => {
         handleNumberChange={handleNumberChange} 
       />
       <h2>Numbers</h2>
-      {rows()}
-      {/* <Contacts 
+      <Contacts 
         list={persons} 
         searchTerm={searchTerm} 
         deleteNameOf={deleteNameOf}
-      /> */}
+      />
     </div>
   )
 }

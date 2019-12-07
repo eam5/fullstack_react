@@ -21,9 +21,14 @@
       "id": 4
     },
     {
-      "name": "new number",
-      "number": "",
+      "name": "New Number",
+      "number": "1234",
       "id": 5
+    },
+    {
+      "name": "Another Number",
+      "number": "1245678",
+      "id": 6
     }
   ]
 }
