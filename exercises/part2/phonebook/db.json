@@ -21,19 +21,9 @@
       "id": 4
     },
     {
-      "name": "New Name",
-      "number": "123-4567",
+      "name": "new number",
+      "number": "",
       "id": 5
-    },
-    {
-      "name": "Another Name",
-      "number": "678-9100",
-      "id": 6
-    },
-    {
-      "name": "Heres Another",
-      "number": "555-1234",
-      "id": 7
     }
   ]
 }

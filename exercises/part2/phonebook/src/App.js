@@ -21,6 +21,18 @@ const App = () => {
   
   const findName = persons.some(element => element.name === newName )
 
+  const rows = () => persons
+  .filter(list => 
+    list.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  .map(list =>
+    <Contacts
+      key={list.name}
+      list={list}
+      deleteNameOf={() => deleteNameOf(list.id)}
+    />
+  )
+
   const addName = (event) => {
       event.preventDefault()
       const nameObject = {
@@ -52,6 +64,19 @@ const App = () => {
     setSearchTerm(event.target.value)
   }
 
+  const deleteNameOf = id => {
+    const person = persons.find(n => n.id === id)
+    // const deletedPerson = { ...person }
+    console.log(person)
+    // console.log(deletedPerson)
+    if
+    (window.confirm(`Delete ${person.name} from Phonebook?`)) {
+      personService 
+      .handleDelete(id)
+      .then(setPersons(persons.filter(n => n.id !== id)))
+    }
+  }
+
   return (
     <div>
       <h1>Phonebook</h1>
@@ -65,7 +90,12 @@ const App = () => {
         handleNumberChange={handleNumberChange} 
       />
       <h2>Numbers</h2>
-      <Contacts list={persons} searchTerm={searchTerm}/>
+      {rows()}
+      {/* <Contacts 
+        list={persons} 
+        searchTerm={searchTerm} 
+        deleteNameOf={deleteNameOf}
+      /> */}
     </div>
   )
 }
