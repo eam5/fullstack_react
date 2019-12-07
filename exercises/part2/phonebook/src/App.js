@@ -3,13 +3,16 @@ import axios from 'axios'
 import Filter from './components/Filter'
 import Form from './components/Form'
 import Contacts from './components/Contacts'
+import Notification from './components/Notification'
 import personService from './services/persons'
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -39,6 +42,13 @@ const App = () => {
               .update(name.id, updateNumber)
               .then(returnedNumber => {
                 setPersons(persons.map(name => name.id !==id ? name : returnedNumber))
+                setErrorMessage(
+                  `${newName}'s phone number was updated to ${newNumber}`
+                )
+                setTimeout(() => {
+                  setErrorMessage(null)
+                }, 5000)
+  
               })
         }
       }
@@ -48,6 +58,12 @@ const App = () => {
         ? numberConfirm()
         : personService.create(nameObject).then(data => {
               setPersons(persons.concat(data))
+              setErrorMessage(
+                `${newName} was added to the Phonebook`
+              )
+              setTimeout(() => {
+                setErrorMessage(null)
+              }, 5000)
             })
       }
 
@@ -83,6 +99,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={errorMessage} />
       <Filter searchTerm={searchTerm} handleSearchChange={handleSearchChange}/>
       <h2>Add new contact</h2>
       <Form 
