@@ -50,13 +50,24 @@ const App = () => {
                 }, 5000)
   
               })
+              .catch(error => {
+                setErrorMessage(
+                  `${newName} was already deleted from server`
+                )
+                setTimeout(() => {
+                  setErrorMessage(null)
+                }, 5000)
+                setPersons(persons.filter(n => n.id !== id))
+              })  
         }
+        
       }
 
       const showAlert = (condition) => {
         condition
         ? numberConfirm()
-        : personService.create(nameObject).then(data => {
+        : personService
+            .create(nameObject).then(data => {
               setPersons(persons.concat(data))
               setErrorMessage(
                 `${newName} was added to the Phonebook`
@@ -64,7 +75,7 @@ const App = () => {
               setTimeout(() => {
                 setErrorMessage(null)
               }, 5000)
-            })
+            })      
       }
 
       showAlert(findName)
@@ -99,7 +110,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <Notification message={errorMessage} />
+      <Notification message={errorMessage} newName={newName} />
       <Filter searchTerm={searchTerm} handleSearchChange={handleSearchChange}/>
       <h2>Add new contact</h2>
       <Form 
