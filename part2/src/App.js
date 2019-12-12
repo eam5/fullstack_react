@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react'
 import Note from './components/Note'
 import Notification from './components/Notification'
 import Footer from './components/Footer'
-import axios from 'axios'
 import noteService from './services/notes'
 
 const App = () => {
@@ -21,7 +20,7 @@ const App = () => {
 
   const notesToShow = showAll
     ? notes
-    : notes.filter(note => note.important === true)
+    : notes.filter(note => note.important)
   
   const rows = () => notesToShow.map(note =>
     <Note
@@ -56,8 +55,6 @@ const App = () => {
   const toggleImportanceOf = id => {
     const note = notes.find(n => n.id === id)
     const changedNote = { ...note, important: !note.important}
-    console.log(note)
-    
 
     noteService
       .update(id, changedNote)
@@ -71,11 +68,9 @@ const App = () => {
         setTimeout(() => {
           setErrorMessage(null)
         }, 5000)
-        // alert(`the note '${note.content}' was already deleted from the server`)
         setNotes(notes.filter(n => n.id !== id))
       })
-console.log(id)
-console.log(changedNote)
+
   }
 
   return (
