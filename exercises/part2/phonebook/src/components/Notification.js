@@ -2,7 +2,7 @@ import React from 'react'
 
 const Notification = ({ message, newName }) => {
     const alertColor = {
-        color: message === `${newName} was already deleted from server` ? 'red' : 'darkblue'
+        color: `red`
     }
 
     if (message === null) {

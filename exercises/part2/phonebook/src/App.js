@@ -67,10 +67,20 @@ const App = () => {
         condition
         ? numberConfirm()
         : personService
-            .create(nameObject).then(data => {
+            .create(nameObject)
+            .then(data => {
               setPersons(persons.concat(data))
               setErrorMessage(
                 `${newName} was added to the Phonebook`
+              )
+              setTimeout(() => {
+                setErrorMessage(null)
+              }, 5000)
+            })
+            .catch(error => {
+              console.log(error.response.data)
+              setErrorMessage(
+                `Person validation failed: name: Path 'name' ('${newName}') is shorter than the minimum allowed length (3).`
               )
               setTimeout(() => {
                 setErrorMessage(null)
