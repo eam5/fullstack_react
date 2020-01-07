@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "watch": "nodemon index.js",
+    "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:ui": "rm -rf build && cd /Users/eam5hc/projects/fullstack_react/part2 && npm run build --prod && cp -r build /Users/eam5hc/projects/fullstack_react/part3",
     "deploy": "git push heroku master",
@@ -21,6 +22,7 @@
     "mongoose": "^5.8.1"
   },
   "devDependencies": {
+    "eslint": "^6.8.0",
     "nodemon": "^2.0.1"
   }
 }
