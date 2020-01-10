@@ -2,6 +2,6 @@ post http://localhost:3001/api/notes
 Content-Type: application/json
 
 {
-    "content": "A",
+    "content": "Browser can execute only Javascript",
     "important": true
 }
