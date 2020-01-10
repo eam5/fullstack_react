@@ -2,6 +2,7 @@ post http://localhost:3001/api/notes
 Content-Type: application/json
 
 {
-    "content": "Browser can execute only Javascript",
-    "important": true
+   "content": "Another note from a user",
+   "important": true,
+   "userId": "5e18c839f3e5c71e446e4922"
 }
