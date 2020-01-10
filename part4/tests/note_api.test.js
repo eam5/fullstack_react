@@ -117,8 +117,8 @@ test('a valid note can be added ', async () => {
 
   test('a specific note can be viewed', async () => {
     const notesInDb = async () => {
-    const notes = await Note.find({})
-    return notes.map(note => note.toJSON())
+      const notes = await Note.find({})
+      return notes.map(note => note.toJSON())
     }
     const notesAtStart = await notesInDb()
   
