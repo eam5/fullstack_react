@@ -1,8 +1,10 @@
 post http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjVlMWNhNTU1NGJiYjU3MTJmOGM5NWIxOSIsImlhdCI6MTU3ODkzODQyM30.h_CUHCDquGT-nahrtjc5_VvUQabBXXdW580XefSuFzI
 
 {
-    "title": "Ablog",
-    "author": "Author Name 3",
-    "url": "blog3.com"
+    "title": "using token authorization",
+    "author": "Super User",
+    "url": "blog.com",
+    "userId": "5e1ca5554bbb5712f8c95b19"
 }
