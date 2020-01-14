@@ -1,7 +1,5 @@
 import axios from 'axios'
-// const baseUrl = 'http://localhost:3001/notes'
-// const baseUrl = 'https://powerful-escarpment-64954.herokuapp.com/notes'
-const baseUrl = '/api/notes'
+const baseUrl = 'http://localhost:3003/api/blogs'
 
 let token = null
 
@@ -11,13 +9,7 @@ const setToken = newToken => {
 
 const getAll = () => {
   const request = axios.get(baseUrl)
-  const nonExisting = {
-    id: 10000,
-    content: 'This note is not saved to the server',
-    date: '2019-05-30T17:30:31.098Z',
-    important: true,
-  }
-  return request.then(response => response.data.concat(nonExisting))
+  return request.then(response => response.data)
 }
 
 const create = async newObject => {
@@ -30,8 +22,9 @@ const create = async newObject => {
 }
 
 const update = (id, newObject) => {
-  const request = axios.put(`${baseUrl}/${id}`, newObject)
+  const request = axios.put(`${ baseUrl } /${id}`, newObject)
   return request.then(response => response.data)
 }
+
 
 export default { getAll, create, update, setToken }
