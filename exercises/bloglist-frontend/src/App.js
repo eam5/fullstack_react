@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
+import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'  
 
@@ -30,13 +32,20 @@ function App() {
     }
   }, [])
 
+  const blogFormRef = React.createRef()
+
   const blogForm = () => (
-    <form onSubmit={addBlog}>
-      title: <input value={newBlog} onChange={handleBlogChange} /><br />
-      author: <input value={newAuthor} onChange={handleAuthorChange} /><br />
-      url: <input value={newUrl} onChange={handleUrlChange} /><br />
-      <button type="submit">add</button>
-    </form>
+    <Togglable buttonLabel="new blog" ref={blogFormRef}>
+      <BlogForm
+        onSubmit={addBlog}
+        handleBlogChange={handleBlogChange}
+        handleAuthorChange={handleAuthorChange}
+        handleUrlChange={handleUrlChange}
+        newBlog={newBlog}
+        newAuthor={newAuthor}
+        newUrl={newUrl}
+      />  
+    </Togglable>
   )
 
   const handleBlogChange = (event) => {
@@ -51,6 +60,7 @@ function App() {
 
 const addBlog = (event) => {
   event.preventDefault()
+  blogFormRef.current.toggleVisibility()
   const blogObject = {
     title: newBlog,
     author: newAuthor,
@@ -72,6 +82,27 @@ console.log(blogObject)
     setNewBlog('')
     setNewAuthor('')
     setNewUrl('')
+  }
+
+  const addLike = (id) => {
+    const blog = blogs.find(n => n.id === id)
+    const changedBlog = { ...blog, likes: blog.likes +1}
+console.log(changedBlog)
+    blogService
+      .update(id, changedBlog)
+      .then(returnedBlog => {
+        setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+      })
+  }
+
+  const deleteBlog = id => {
+    const blog = blogs.find(n => n.id === id)
+
+    if (window.confirm(`Delete '${blog.title}' from blog list?`)) {
+      blogService
+      .handleDelete(id)
+      .then(setBlogs(blogs.filter(n => n.id !== id)))
+    }
   }
 
   const handleLogout = async (event) => {
@@ -102,13 +133,18 @@ console.log(blogObject)
     }
   }
 
-  const rows = () => blogs.map(blog =>
-    <Blog
-      key={blog.id}
-      blog={blog}
-    />
-  )
-
+  const rows = () => blogs
+    .sort((a,b) => -(a.likes - b.likes))
+    .map(blog =>
+      <Blog
+        key={blog.id}
+        blog={blog}
+        addLike={() => addLike(blog.id)}
+        deleteBlog={deleteBlog}
+        user={user}
+      />
+    )
+  
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
@@ -136,7 +172,7 @@ console.log(blogObject)
   if (user === null) {
     return (
       <div>
-        <h3>Log in to application</h3>
+        <h2>Log in to application</h2>
         <Notification message={errorMessage} />
         {loginForm()}
       </div>
@@ -146,7 +182,7 @@ console.log(blogObject)
   return (
     <div>
       <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
-      <h3>Blogs</h3>
+      <h1>Blogs</h1>
       <Notification message={errorMessage} />
       {blogForm()}
       <br />
