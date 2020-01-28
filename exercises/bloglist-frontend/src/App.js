@@ -4,18 +4,20 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
-import loginService from './services/login'  
-
+import loginService from './services/login' 
+import  { useField } from './hooks'
 
 function App() {
   const [blogs, setBlogs] = useState([])
-  const [newBlog, setNewBlog] = useState('') 
-  const [newAuthor, setNewAuthor] = useState('') 
-  const [newUrl, setNewUrl] = useState('') 
   const [errorMessage, setErrorMessage] = useState(null)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null) 
+
+  const username = useField('text')
+  const password = useField('password')
+
+  const newBlog = useField('text')
+  const newAuthor = useField('text')
+  const newUrl = useField('text')
 
   useEffect(() => {
     blogService
@@ -34,13 +36,11 @@ function App() {
 
   const blogFormRef = React.createRef()
 
+
   const blogForm = () => (
-    <Togglable buttonLabel="new blog" ref={blogFormRef}>
+    <Togglable buttonLabel="new blog"  ref={blogFormRef} >
       <BlogForm
         onSubmit={addBlog}
-        handleBlogChange={handleBlogChange}
-        handleAuthorChange={handleAuthorChange}
-        handleUrlChange={handleUrlChange}
         newBlog={newBlog}
         newAuthor={newAuthor}
         newUrl={newUrl}
@@ -48,23 +48,13 @@ function App() {
     </Togglable>
   )
 
-  const handleBlogChange = (event) => {
-    setNewBlog(event.target.value)
-  }
-  const handleAuthorChange = (event) => {
-    setNewAuthor(event.target.value)
-  }
-  const handleUrlChange = (event) => {
-    setNewUrl(event.target.value)
-  }
-
 const addBlog = (event) => {
   event.preventDefault()
   blogFormRef.current.toggleVisibility()
   const blogObject = {
-    title: newBlog,
-    author: newAuthor,
-    url: newUrl,
+    title: newBlog.value,
+    author: newAuthor.value,
+    url: newUrl.value,
   }
 console.log(blogObject)
   blogService
@@ -72,22 +62,22 @@ console.log(blogObject)
     .then(data => {
       setBlogs(blogs.concat(data))
       setErrorMessage(
-        `${newBlog} was added`
+        `${newBlog.value} was added`
       )
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
     })
 
-    setNewBlog('')
-    setNewAuthor('')
-    setNewUrl('')
+    newBlog.reset()
+    newAuthor.reset()
+    newUrl.reset()
   }
 
   const addLike = (id) => {
     const blog = blogs.find(n => n.id === id)
     const changedBlog = { ...blog, likes: blog.likes +1}
-console.log(changedBlog)
+
     blogService
       .update(id, changedBlog)
       .then(returnedBlog => {
@@ -114,17 +104,17 @@ console.log(changedBlog)
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginService.login({
-        username, password,
-      })
+      const user = await loginService.login({ username: username.value, password: password.value })
 
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
       )    
       blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
+      
+      username.reset()
+      password.reset()
+      
     } catch (exception) {
       setErrorMessage('Wrong credentials')
       setTimeout(() => {
@@ -144,26 +134,16 @@ console.log(changedBlog)
         user={user}
       />
     )
-  
+ 
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
         username
-        <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
+        <input {...username} reset={null} name="Username"/>
       </div>
       <div>
         password
-        <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
+        <input {...password} reset={null} name="Password"/>
       </div>
       <button type="submit">login</button>
     </form>
