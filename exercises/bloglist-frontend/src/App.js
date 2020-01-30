@@ -36,7 +36,6 @@ function App() {
 
   const blogFormRef = React.createRef()
 
-
   const blogForm = () => (
     <Togglable buttonLabel="new blog"  ref={blogFormRef} >
       <BlogForm

@@ -22,7 +22,7 @@ const Blog = ({ blog, addLike, deleteBlog, user }) => {
 
   const hideButton = { 
     display: (user.name !== blog.user.name) ? 'none' : ''}
-
+console.log(blog.user.name)
   return (
     <div style={blogStyle}>
     <div style={hideWhenVisible} onClick={toggleVisibility}>
